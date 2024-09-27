@@ -1,0 +1,108 @@
+<settings [viewSettings]="viewSettings"></settings>>
+
+<div class="flex flex-col items-start justify-between sm:flex-row">
+  <div class="truncate text-lg font-medium leading-6 tracking-tight">
+    Participant Clinic Board
+  </div>
+  <div class="mt-3 sm:ml-2 sm:mt-0">
+
+</div>
+
+</div>
+<div class="mt-2 flex flex-col divide-y">
+  @for (row of clinicBoard$ | async; track row) {
+  <div class="flex flex-row items-center justify-between px-0.5 py-4 hover:bg-gray-100" [ngClass]="getSubjectStatus(row)">
+    <div class="flex flex-col">
+      <div class="font-medium">
+        <span class="text-primary font-medium m-2 text-2xl">{{ row.subject_id }}</span>  {{ row.study_number }}
+      </div>
+      <div class="-ml-0.5 mt-2 flex flex-row space-y-1 sm:mt-1 sm:flex-row sm:items-center sm:space-x-3 sm:space-y-0">
+        @if (row.visit_name) {
+        <div class="flex items-center m-2">
+          <mat-icon class="text-hint icon-size-5" [svgIcon]="
+                                  'heroicons_solid:clock'
+                              "></mat-icon>
+          <div class="text-secondary ml-1.5 text-md">
+            {{
+            row.visit_name
+            }}
+          </div>
+        </div>
+        }
+        @if (
+        row.primary_coordinator
+        ) {
+        <div class="flex items-center">
+          <mat-icon class="text-hint icon-size-5 text-primary" [svgIcon]="
+                                  'heroicons_solid:user'
+                              "></mat-icon>
+          <div class="text-secondary ml-1.5 text-md">
+            {{
+            row.primary_coordinator
+            }}
+          </div>
+        </div>
+        }
+        @if (
+          row.arrived
+          ) {
+          <div class="flex items-center">
+            <mat-icon class="text-hint icon-size-5 text-primary" [svgIcon]="
+                                    'heroicons_solid:clock'
+                                "></mat-icon>
+            <div class="text-secondary ml-1.5 text-md">
+                {{ row.arrived ? row.arrived : ("" | date) }}
+            </div>
+          </div>
+          }
+  
+      </div>
+    </div>
+
+    <div>
+      <button
+        mat-icon-button
+        (click)="viewVisitDetails(row)"
+        [matTooltip]="'View visit details '"
+      > 
+        <mat-icon
+          class="mx-1 icon-lg"
+          [svgIcon]="getGridIcon(row, 'davesaicons_solid:davesa-c')"
+        >
+        </mat-icon>
+      </button>
+
+      @if(!row.subject_clinic?.check_in_time) {
+        <button
+          mat-icon-button
+          (click)="checkInParticipant(row)"
+          [matTooltip]="'Check In Participant'"
+        > 
+          <mat-icon
+            class="mx-1 icon-lg"
+            [svgIcon]="'davesaicons_solid:check-in'"
+          >
+          </mat-icon>
+        </button>
+      }
+
+      @if(row.subject_clinic?.check_in_time &&
+      !row.subject_clinic?.check_out_time) {
+      <button
+          mat-icon-button
+          (click)="checkOutParticpant(row)"
+          [matTooltip]="'Check Out Participant'"
+        > 
+          <mat-icon
+            class="mx-1 icon-lg"
+            [svgIcon]="'davesaicons_solid:check-out'"
+          >
+          </mat-icon>
+        </button>
+        }
+    </div>
+
+
+  </div>
+  }
+</div>

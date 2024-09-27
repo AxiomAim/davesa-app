@@ -1,0 +1,37 @@
+@if (participants$ | async; as participants | groupBy: 'study_number') {
+    <!-- Study selector-->
+    <div class="mt-4 flex items-center sm:mt-0 md:mt-4">
+        <div class="bg-default w-min relative flex cursor-pointer self-start overflow-hidden rounded-t-xl border border-b-0 pb-1 pl-5 pr-4 pt-2"
+            matRipple [matMenuTriggerFor]="studyMenu">
+            <div class="flex items-center">
+                <div class="overflow-hidden">
+                    <div class="truncate font-medium leading-6"
+                        [ngClass]="selectedStudy ? 'text-gray-900' : 'text-gray-500'">
+                        {{ selectedStudy ? selectedStudy : placeholderStudy }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-center pl-2">
+                    <mat-icon class="icon-size-5"
+                        [ngClass]="selectedStudy ? 'text-gray-900' : 'text-gray-500'"
+                        [svgIcon]="'heroicons_mini:chevron-down'"></mat-icon>
+                </div>
+                <div class="flex items-center justify-center pl-2 items-end" (click)="resetSelectedStudy()">
+                    <mat-icon class="icon-size-5" [ngClass]="selectedStudy ? 'text-warn' : 'text-gray-100'"
+                        [svgIcon]="'mat_outline:cancel'"></mat-icon>
+                </div>
+            </div>
+
+            <mat-menu #studyMenu="matMenu" [xPosition]="'before'">
+                @for (
+                study of studies;
+                track trackByFn(i, study);
+                let i = $index
+                ) {
+                <button mat-menu-item (click)="selectedStudy = '{{ study }}'">
+                    {{ study }}
+                </button>
+                }
+            </mat-menu>
+        </div>
+    </div>
+    }

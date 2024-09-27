@@ -1,0 +1,55 @@
+#dialog-container {
+    display: block;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+  }
+  .templatetext {
+    display: flex;
+    justify-content: space-between;
+  }
+  .e-icons {
+    font-size: 26px;
+  }
+  .notificationIcon {
+    float: right;
+    color: #e3165b;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+  }
+  .e-conditional-formatting :before {
+    content: '\e71b';
+  }
+  
+  li.e-disabled {
+    opacity: 1 !important;
+    span {
+      opacity: 0.35 !important;
+    }
+    mat-icon {
+      opacity: 1 !important;
+    }
+  }
+  
+  ::ng-deep .e-list-parent .e-list-item {
+    .e-ripple-element {
+      background: none !important;
+    }
+  }
+  
+  .e-dlg-header {
+    margin-left: 16px !important;
+  }
+  .e-dlg-closeicon-btn {
+    margin-right: 16px !important;
+  }
+
+  .e-grid .e-spinner-pane {
+    //hide the Grid spinner
+    display: none;
+  }
+  
+  

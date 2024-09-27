@@ -1,0 +1,138 @@
+<div class="flex min-w-0 flex-auto flex-col">
+  <!-- Header -->
+  <div
+    class="bg-card flex flex-0 flex-col border-b p-6 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-8">
+    Participant Visits
+  </div>
+
+  <!-- Main -->
+  <div class="flex-auto self-center">
+    <!-- <div class="prose prose-sm max-w-5xl"> -->
+    <div class="-mx-4 flex flex-wrap">
+      @if (visitStatus$ | async; as visitStatus ) {
+      @for (visit of visitStatus; track visit) {
+      <div
+        class="bg-card flex max-h-20 min-h-20 min-w-26 max-w-26 cursor-pointer flex-col items-center justify-center rounded border-2 p-4"
+        [ngClass]="visit.bgClass">
+        <div class="mb-3 p-1 flex items-center justify-center bg-white">
+          <mat-icon class="icon-size-5" [ngClass]="visit.textClass" [svgIcon]="visit.icon"></mat-icon>
+        </div>
+
+        <div class="text-secondary break-all text-center text-xs" [ngClass]="visit.textClassContrast">
+          {{ visit.name }}
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+  <!-- </div> -->
+</div>
+
+<div class="bg-blue-100">
+  <main className=" flex flex-row h-screen">
+    <div class="font-medium text-3xl text-grey-500">Subject Visits</div>
+    <ejs-grid [dataSource]='participants$ | async' height='100%' [toolbar]='toolbar' [allowGrouping]='true'
+      [enableColumnVirtualization]=true id="itemdGrid" allowTextWrap="false" [allowPaging]="true"
+      [pageSettings]='pageSettings' [toolbar]="toolbar" [allowSorting]='true'>
+      <e-columns>
+        <e-column field='subject_id' headerText='Participant' textAlign='Left' width=50
+          [validationRules]='rules'></e-column>
+        <e-column field='status' headerText='Status' textAlign='Left' width=50 [validationRules]='rules'></e-column>
+        <ng-template let-data #template>
+          <div class="flex flex-nowrap w-full min-w-0  gap-6 ">
+            <!-- @for (item of data.visit | sortByField: 'id'; track item) { -->
+              <!-- <visit-item [visit]="item"></visit-item> -->
+            <!-- } -->
+          </div>
+        </ng-template>
+        <ng-template #headerTemplate let-data>
+          <!-- @for (item of data.visit | sortByField: 'id'; track item) { -->
+              <div>
+                <span class="e-icons e-location"></span> Item
+              </div>
+            <!-- } -->
+        </ng-template>
+
+        <e-column field="visits" headerText="Visits" width=200 [allowSorting]="true" textAlign="center"
+          [validationRules]='rules'>
+          <ng-template #template #editTemplate let-data>
+            <div class="flex flex-nowrap w-full min-w-0  gap-6 ">
+              @for (item of data.visit | sortByField: 'id'; track item) {
+                {{ addTemplateColumn(item) }}
+                <!-- <visit-item [visit]="item"></visit-item> -->
+              }
+            </div>
+          </ng-template>
+        </e-column>
+      </e-columns>
+    </ejs-grid>
+  </main>
+</div>
+
+
+<!-- <div class="table-responsive bg-amber-100">
+  <table mat-table [dataSource]="rows" class="mat-elevation-z8 mt-2">
+    <ng-container matColumnDef="subjectId" sticky>
+      <th mat-header-cell *matHeaderCellDef class="text-center">
+        <b>Subject Id</b>
+      </th>
+      <td mat-cell *matCellDef="let element" class="text-center" [matTooltip]="element?.subject_id">
+        <label>{{ element?.subject_id }}</label>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="DOB">
+      <th mat-header-cell *matHeaderCellDef class="text-center"><b>DOB</b></th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        <label>{{ element?.birth_date | date : 'dd/MMM/yyyy' }}</label>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="text-center">
+        <b>Status</b>
+      </th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        <label>{{ element?.status }} </label>
+      </td>
+    </ng-container>
+
+    <ng-container *ngFor="let dynamicColumnName of dynamicColumn; let index = index" [matColumnDef]="dynamicColumnName">
+      <th mat-header-cell *matHeaderCellDef class="text-center">
+        <b>{{ dynamicColumnName }}</b>
+      </th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        @if(element) {
+          <ng-container *ngIf="isThereVisit(element.visit, dynamicColumnName); else noAppointment">
+            <a mat-stroked-button href="javascript:void(0)" class="hyperLink" [matMenuTriggerFor]="menu"
+              [ngClass]="getStatusColor(dynamicColumnName, false, element.visit)">
+              {{ element[dynamicColumnName] ? (element[dynamicColumnName] | date : 'dd MMM yyyy hh:mm a') : 'DD MMM YYYY'
+              }}
+            </a>
+            <mat-menu #menu="matMenu" yPosition="below" xPosition="after">
+              <button mat-menu-item (click)="setAppointment(element, element.visit, dynamicColumnName)">Set
+                Appointment</button>
+              <button mat-menu-item (click)="visitInfoDialog(element, element.visit, dynamicColumnName)">View Visit
+                Info</button>
+              <button mat-menu-item (click)="viewSubjectDetail(element)">Open Subject</button>
+            </mat-menu>
+          </ng-container>
+        }
+        <ng-template #noAppointment> - </ng-template>
+      </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="column"></tr>
+    <tr mat-row *matRowDef="let row; columns: column" (mouseover)="row.hovered = false" (mouseout)="row.hovered = false"
+      (dblclick)="viewSubjectDetail(row)"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" class="text-center" colspan="9999">No records found</td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <mat-paginator (page)="pagination($event)" [length]="allCount" [pageSizeOptions]="pageLimitOptions"
+    showFirstLastButtons="">
+  </mat-paginator>
+</div> -->

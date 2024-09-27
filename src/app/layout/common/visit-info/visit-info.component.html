@@ -1,0 +1,221 @@
+<!-- <h1>Visit Info</h1>
+<participant></participant>
+<span mat-dialog-title>{{ title }}</span>
+<mat-tab-group (selectedTabChange)="panelClick($event)">
+  <mat-tab label="Procedure eSource Forms">
+    <div *ngIf="panel == 'Procedure eSource Forms'">
+      <mat-accordion mutli="false">
+        <div *ngFor="let procedure of esourceDataSource; let i = index">
+          <mat-expansion-panel
+            *ngFor="let esource of procedure.esourceForms; let i = index"
+            class="my-2"
+            (opened)="openEsourceDialog(esource)"
+          >
+            <mat-expansion-panel-header #hpanel>
+              <mat-panel-title class="w-40">
+                <div class="font-w-500 w-100">
+                  {{ esource?.name | titlecase }}
+                </div>
+              </mat-panel-title>
+              <mat-panel-description class="w-60">
+                <div class="justify-content-between w-100 align-item-center">
+                  <span
+                    class="mx-3"
+                    [class]="
+                      esource.status === 'completed'
+                        ? 'text-green mx-3'
+                        : 'text-orange mx-3'
+                    "
+                    >{{ esource.status | titlecase }}</span
+                  >
+                  <ejs-dropdownlist
+                    class="mx-3"
+                    [dataSource]="doaUsers"
+                    [fields]="fields"
+                    [placeholder]="text"
+                    [allowFiltering]="true"
+                    (filtering)="onFiltering($event)"
+                    [value]="esource.user_id"
+                    (change)="handleDropDownChange($event, esource)"
+                    (click)="$event.stopPropagation()"
+                  ></ejs-dropdownlist>
+                </div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div>
+              <ng-template matExpansionPanelContent>
+                <visit-info-esource
+                  *ngIf="EsourceData"
+                  [esourceData]="EsourceData"
+                  [isCompareVisit]="isCompareVisit"
+                  (completeEsourceEvent)="completeEsource()"
+                ></visit-info-esource>
+              </ng-template>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+  <mat-tab label="Procedure Tasks">
+    <ejs-treegrid
+      [dataSource]="taskDataSource"
+      [treeColumnIndex]="1"
+      childMapping="tasks"
+      #taskGrid
+      [enableCollapseAll]="false"
+      [allowPaging]="true"
+      [pageSettings]="taskPageSettings"
+      *ngIf="panel == 'Procedure Tasks'"
+    >
+      <e-columns>
+        <e-column
+          field="id"
+          [disableHtmlEncode]="false"
+          headerText="<h3>Id</h3>"
+          textAlign="Left"
+          width="50"
+        ></e-column>
+        <e-column
+          field="name"
+          [disableHtmlEncode]="false"
+          headerText="<h3>Procedure Name</h3>"
+          textAlign="Left"
+          width="150"
+        ></e-column>
+        <e-column
+          field="type"
+          [disableHtmlEncode]="false"
+          headerText="<h3>Task Type</h3>"
+          textAlign="Right"
+          width="70"
+        ></e-column>
+        <e-column
+          [disableHtmlEncode]="false"
+          headerText="<h3>Status</h3>"
+          textAlign="Right"
+          width="100"
+        >
+          <ng-template #template let-data>
+            <ejs-dropdownlist
+              *ngIf="!data.hasChildRecords && data.user_id"
+              [dataSource]="type"
+              [fields]="statusFields"
+              [placeholder]="text"
+              [value]="data.status"
+              (change)="statusChange($event, data, 'task')"
+            ></ejs-dropdownlist>
+            <div
+              *ngIf="data.hasChildRecords"
+              [class]="
+                data.procedure_task_status === 'Complete'
+                  ? 'text-green'
+                  : 'text-orange'
+              "
+            >
+              {{ data.procedure_task_status }}
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column
+          field=""
+          [disableHtmlEncode]="false"
+          headerText="<h3>Assignee</h3>"
+          textAlign="Right"
+          width="100"
+        >
+          <ng-template #template let-data>
+            <button
+              *ngIf="!data.hasChildRecords"
+              ejs-button
+              cssClass="e-small"
+              (click)="addUser(data)"
+            >
+              add
+            </button>
+            <div *ngIf="data.user_id">
+              <mat-chip-list
+                *ngIf="!data.hasChildRecords"
+                style="float: right"
+                class="my-2"
+              >
+                <mat-chip>
+                  {{ data.user_name }}
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+          </ng-template>
+        </e-column>
+      </e-columns>
+    </ejs-treegrid>
+  </mat-tab>
+</mat-tab-group>
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <div *ngIf="!isCompareVisit">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="save()"
+      class="mr-2"
+      [disabled]="createUserArray.length === 0 && updateUserArray.length === 0"
+    >
+      Save
+    </button>
+    <button
+      *ngIf="subjectInfo.status ===visitStatus.FINISHED"
+      mat-raised-button
+      color="primary"
+      (click)="CloseorCompleteVisit(visitStatus.VALIDATED)"
+    >
+      Validate Visit
+    </button>
+    <button
+    *ngIf="subjectInfo.status ===visitStatus.REVIEW"
+    mat-raised-button
+    color="primary"
+    (click)="CloseorCompleteVisit(visitStatus.FINISHED)"
+  >
+    Finish Visit
+  </button>
+  </div>
+
+  <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+</div>
+
+<ejs-dialog
+  id="dialog"
+  #ejDialog
+  header="Assign User"
+  width="400px"
+  [visible]="visible"
+  (beforeOpen)="onBeforeOpen($event)"
+  showCloseIcon="true"
+>
+  <ng-template #content>
+    <ejs-listview
+      #List
+      id="list"
+      [dataSource]="doaUsers"
+      [fields]="fields"
+      (select)="onUserSelect($event, selectedProcedureTask)"
+      (actionBegin)="onActionBegin()"
+    >
+      <ng-template #template let-data>
+        <div>
+          <span>{{ data.name }} </span>
+          <button
+            *ngIf="!data.userCredentialsIsValid"
+            class="notificationIcon"
+            (click)="sendNotification(data.id)"
+          >
+            <mat-icon>notifications</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </ejs-listview>
+    <div class="font-16 no-record" *ngIf="doaUsers.length == 0">
+      No User Found
+    </div>
+  </ng-template>
+</ejs-dialog> -->

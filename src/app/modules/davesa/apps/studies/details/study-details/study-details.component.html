@@ -1,0 +1,228 @@
+<div class="theme-container m-3">
+  @if (study$ | async; as study) {
+  <!-- Study Details 1 -->
+  <div class="flex flex-wrap w-full bg-gray-200">
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          Site:
+        </div>
+        <div class="basis-3/4">
+          {{ study.site_account.site_name }}
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          Site No:
+        </div>
+        <div class="basis-3/4">
+          {{ study.site_number }}
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          PI:
+        </div>
+        <div class="basis-3/4">
+          @for(
+          list of study.pi_user_list; track trackByFn($index, list)
+          ) {
+          <span>{{ list.study_invite_user.user.first_name }} {{ list.study_invite_user.user.last_name }}</span>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          Indication:
+        </div>
+        <div class="basis-3/4">
+          {{ study.indication }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Study Details 2 -->
+  <div class="flex flex-wrap w-full bg-gray-200">
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          Sponsor:
+        </div>
+        <div class="basis-3/4">
+          {{ study?.sponsor_contact_info?.name }}
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          CRO:
+        </div>
+        <div class="basis-3/4">
+          {{ study?.cro_contact_info?.name }}
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          IRB:
+        </div>
+        <div class="basis-3/4">
+          {{ study?.irg_contact_info?.name }}
+        </div>
+      </div>
+    </div>
+    <div class="basis-1/4 sm:basis-full md:basis-1/2 lg:basis-1/4">
+      <div class="flex flex-row m-1">
+        <div class="basis-1/4 font-medium text-primary">
+          Protocol:
+        </div>
+        <div class="basis-3/4">
+          @for(
+          protocol of study.study_protocols; track trackByFn($index, protocol)
+          ) {
+          <span>{{ protocol.number }}</span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+  <div class="flex flex-wrap w-full bg-gray-200">
+    <div class="basis-1/4 shrink-1">
+      <button mat-stroked-button (click)="viewDoa = !viewDoa" class="bg-purple-100 w-full">
+        <mat-icon class="icon-size-5"
+          [svgIcon]="viewDoa ? 'heroicons_outline:chevron-up' : 'heroicons_outline:chevron-down'"></mat-icon>
+        <span class="ml-1 text-sm">DOA</span>
+      </button>
+    </div>
+    <div class="basis-1/4 shrink-1">
+      <button mat-stroked-button (click)="viewContacts = !viewContacts" class="bg-amber-100 w-full">
+        <mat-icon class="icon-size-5"
+          [svgIcon]="viewContacts ? 'heroicons_outline:chevron-up' : 'heroicons_outline:chevron-down'"></mat-icon>
+        <span class="ml-1 text-sm">Contacts</span>
+      </button>
+    </div>
+    <div class="basis-1/4 shrink-1">
+      <button mat-stroked-button (click)="viewTeam = !viewTeam" class="bg-blue-100 w-full">
+        <mat-icon class="icon-size-5"
+          [svgIcon]="viewTeam ? 'heroicons_outline:chevron-up' : 'heroicons_outline:chevron-down'"></mat-icon>
+        <span class="ml-1 text-sm">Team</span>
+      </button>
+    </div>
+
+    @if(viewDoa) {
+    <div class="bg-purple-100">
+      <main className=" flex flex-row h-screen">
+        <div class="font-medium text-3xl text-grey-500">DOA</div>
+        <div className=" w-full bg-gray-50 h-screen overscroll-auto">
+          <ejs-grid [dataSource]='contacts$ | async' height='100%' [toolbar]='toolbar' [allowGrouping]='true'
+            id="itemdGrid" allowTextWrap="true" [textWrapSettings]="wrapSettings" [allowPaging]="true"
+            [pageSettings]='pageSettings' [toolbar]="toolbar" [allowSorting]='true'>
+            <e-columns>
+              <e-column field="name" headerText="Name" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.first_name }} {{ data.last_name }}
+                  </div>
+                </ng-template>
+              </e-column>
+              <e-column field='organization' headerText='Organization' textAlign='Left' width=40></e-column>
+              <e-column field='phone' headerText='Phone' textAlign='Left' width=40></e-column>
+              <e-column field="address" headerText="Address" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.street_1 }} {{ data.street_2 }} {{ data.city.name }} {{ data.state.name }} {{ data.zip }} {{
+                    data.country.name }}
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </main>
+    </div>
+
+    }
+
+    @if(viewContacts) {
+    <div class="bg-amber-100">
+      <main className=" flex flex-row h-screen">
+        <div class="font-medium text-3xl text-grey-500">Study Contacts</div>
+        <div className=" w-full bg-gray-50 h-screen overscroll-auto">
+          <ejs-grid [dataSource]='contacts$ | async' height='100%' [toolbar]='toolbar' [allowGrouping]='true'
+            id="itemdGrid" allowTextWrap="true" [textWrapSettings]="wrapSettings" [allowPaging]="true"
+            [pageSettings]='pageSettings' [toolbar]="toolbar" [allowSorting]='true'>
+            <e-columns>
+              <e-column field="name" headerText="Name" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.first_name }} {{ data.last_name }}
+                  </div>
+                </ng-template>
+              </e-column>
+              <e-column field='organization' headerText='Organization' textAlign='Left' width=40></e-column>
+              <e-column field='phone' headerText='Phone' textAlign='Left' width=40></e-column>
+              <e-column field="address" headerText="Address" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.street_1 }} {{ data.street_2 }} {{ data.city.name }} {{ data.state.name }} {{ data.zip }} {{
+                    data.country.name }}
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </main>
+    </div>
+    }
+
+    @if(viewTeam) {
+    <div class="bg-blue-100">
+      <main className=" flex flex-row h-screen">
+        <div class="font-medium text-3xl text-grey-500">Clinic Team</div>
+        <div className=" w-full bg-gray-50 h-screen overscroll-auto">
+          <ejs-grid [dataSource]='contacts$ | async' height='100%' [toolbar]='toolbar' [allowGrouping]='true'
+            id="itemdGrid" allowTextWrap="true" [textWrapSettings]="wrapSettings" [allowPaging]="true"
+            [pageSettings]='pageSettings' [toolbar]="toolbar" [allowSorting]='true'>
+            <e-columns>
+              <e-column field="name" headerText="Name" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.first_name }} {{ data.last_name }}
+                  </div>
+                </ng-template>
+              </e-column>
+              <e-column field='organization' headerText='Organization' textAlign='Left' width=40></e-column>
+              <e-column field='phone' headerText='Phone' textAlign='Left' width=40></e-column>
+              <e-column field="address" headerText="Address" width="20" [allowSorting]="true" textAlign="center">
+                <ng-template #template #editTemplate let-data>
+                  <div
+                    class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    {{ data.street_1 }} {{ data.street_2 }} {{ data.city.name }} {{ data.state.name }} {{ data.zip }} {{
+                    data.country.name }}
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </main>
+    </div>
+    }
+
+
+  </div>

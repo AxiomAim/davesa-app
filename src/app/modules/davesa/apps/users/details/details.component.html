@@ -1,0 +1,475 @@
+<div class="flex w-full flex-col">
+    <!-- View mode -->
+    @if (!editMode) {
+        <!-- Header -->
+        <div
+            class="relative h-40 w-full bg-accent-100 px-8 dark:bg-accent-700 sm:h-48 sm:px-12"
+        >
+            <!-- Background -->
+            <img
+                class="absolute inset-0 h-full w-full object-cover"
+                [src]="'images/cards/davesa-640x480.jpg'"
+            />
+            <!-- Close button -->
+            <div
+                class="mx-auto flex w-full max-w-3xl items-center justify-end pt-6 "
+            >
+                <a
+                    mat-icon-button
+                    [matTooltip]="'Close'"
+                    [routerLink]="['../']"
+                    class="bg-warn-300"
+                >
+                    <mat-icon
+                        class="text-gray"
+                        [svgIcon]="'heroicons_outline:x-mark'"
+                    ></mat-icon>
+                </a>
+            </div>
+        </div>
+
+        <!-- User -->
+        <div
+            class="relative flex flex-auto flex-col items-center p-6 pt-0 sm:p-12 sm:pt-0"
+        >
+            <div class="w-full max-w-3xl">
+                <!-- Avatar and actions -->
+                <div class="-mt-16 flex flex-auto items-end">
+                    <!-- Avatar -->
+                    <div
+                        class="ring-bg-card flex h-32 w-32 items-center justify-center overflow-hidden rounded-full ring-4"
+                    >
+                        @if (user.profile_img_url) {
+                            <img 
+                            class="flex h-full w-full items-center justify-center overflow-hidden rounded bg-gray-200 text-8xl font-bold uppercase leading-none text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                [ngClass]="user.active == 'Yes' ? 'grayscale-0' : 'grayscale'"
+                                [src]="user.profile_img_url" alt="User avatar" />
+                            }
+                            @if (!user.profile_img_url) {
+                            <div 
+                            class="flex h-full w-full items-center justify-center overflow-hidden rounded bg-gray-200 text-8xl font-bold uppercase leading-none text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                [ngClass]="user.active == 'Yes' ? 'bg-green-200' : 'bg-gray-200'">
+                                {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+                            </div>
+                            }
+
+                    </div>
+                    <!-- Actions -->
+                    <div class="mb-1 ml-auto flex items-center">
+                        <button
+                            mat-stroked-button
+                            (click)="toggleEditMode(true)"
+                        >
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_solid:pencil-square'"
+                            ></mat-icon>
+                            <span class="ml-2">Edit</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Name -->
+                <div class="mt-3 truncate text-4xl font-bold">
+                    {{ user.name }} <!--{{ user.first_name }} {{ user.last_name }}-->
+                </div>
+
+                <div class="basis-1/3 ml-4 min-w-0">
+                        @for (
+                        role of user.user_roles;
+                        track trackByFn(i, role);
+                        let i = $index
+                        ) {
+                        <mat-chip class="text-sm truncate leading-5 bg-slate-300 m-1 p-1">
+                            {{ role.role.name }}  
+                        </mat-chip>
+                    }
+                        @for (
+                        site of user.user_site_accounts;
+                        track trackByFn(i, site);
+                        let i = $index
+                        ) {
+                        <mat-chip class="text-sm truncate leading-5 bg-blue-200 m-1 p-1">
+                            {{ site.site_account.site_name }}   
+                        </mat-chip>
+                    }
+                </div>
+
+                <div class="basis-1/3 ml-4 min-w-0 mt-2">
+                    @for (
+                    role of user.user_delegation_role;
+                    track trackByFn(i, role);
+                    let i = $index
+                    ) {
+                    <mat-chip class="text-sm truncate leading-5 bg-amber-300 m-1 p-1">
+                        {{ role.delegation_role.short_form }}  
+                    </mat-chip>
+                    }
+                </div>
+                <div class="mt-4 flex flex-col space-y-8 border-t pt-6">
+                    <!-- username -->
+                    @if (user.email) {
+                        <div class="flex sm:items-center">
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:user'"
+                            ></mat-icon>
+                            <div class="ml-6 leading-6">
+                                {{ user.username }}
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Email -->
+                    @if (user.email) {
+                        <div class="flex sm:items-center">
+                            <mat-icon
+                                [svgIcon]="'mat_outline:email'"
+                            ></mat-icon>
+                            <div class="ml-6 leading-6">
+                                {{ user.email }}
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Mobile -->
+                    @if (user.email) {
+                        <div class="flex sm:items-center">
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:phone'"
+                            ></mat-icon>
+                            <div class="ml-6 leading-6">
+                                {{ user.mobile_phone }}
+                            </div>
+                        </div>
+                    }
+
+                    <div class="flex sm:items-center">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:map-pin'"
+                        ></mat-icon>
+                        <div class="ml-6 leading-6">
+                            {{ user.address }}
+                        </div>
+                    </div>
+
+                    <!-- <address-search [appearance]="'bar'"></address-search> -->
+                    <search [appearance]="'bar'"></search>
+                    <!-- Website -->
+                    @if (user.website) {
+                        <div class="flex sm:items-center">
+                            <mat-icon
+                                [svgIcon]="
+                                    'mat_outline:web'
+                                "
+                            ></mat-icon>
+                            <div class="ml-6 leading-6">
+                                {{ user.website }}
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Address -->
+                    @if (user.address) {
+                        <div class="flex sm:items-center">
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:map-pin'"
+                            ></mat-icon>
+                            <div class="ml-6 leading-6">
+                                {{ user.address }}
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Edit mode -->
+    @if (editMode) {
+        <!-- Header -->
+        <div
+            class="relative h-40 w-full bg-accent-100 px-8 dark:bg-accent-700 sm:h-48 sm:px-12"
+        >
+            <!-- Background -->
+            <img
+                class="absolute inset-0 h-full w-full object-cover"
+                [src]="'images/cards/davesa-640x480.jpg'"
+            />
+            <!-- Close button -->
+            <div
+                class="mx-auto flex w-full max-w-3xl items-center justify-end pt-6"
+            >
+                <a
+                    mat-icon-button
+                    [matTooltip]="'Close'"
+                    [routerLink]="['../']"
+                    class="bg-warn-100"
+
+                >
+                    <mat-icon
+                        class="text-gray"
+                        [svgIcon]="'heroicons_outline:x-mark'"
+                    ></mat-icon>
+                </a>
+            </div>
+        </div>
+
+        <!-- User form -->
+        <div
+            class="relative flex flex-auto flex-col items-center px-6 sm:px-12"
+        >
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="userForm">
+                    <!-- Avatar -->
+                    <div class="-mt-16 flex flex-auto items-end">
+                        <div
+                            class="ring-bg-card relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full ring-4"
+                        >
+                            <!-- Upload / Remove avatar -->
+                            <div
+                                class="absolute inset-0 z-10 bg-black bg-opacity-50"
+                            ></div>
+                            <div
+                                class="absolute inset-0 z-20 flex items-center justify-center"
+                            >
+                                <div>
+                                    <input
+                                        id="avatar-file-input"
+                                        class="pointer-events-none invisible absolute h-0 w-0 opacity-0"
+                                        type="file"
+                                        [multiple]="false"
+                                        [accept]="'image/jpeg, image/png'"
+                                        (change)="
+                                            uploadAvatar(avatarFileInput.files)
+                                        "
+                                        #avatarFileInput
+                                    />
+                                    <label
+                                        class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full hover:bg-hover"
+                                        for="avatar-file-input"
+                                        matRipple
+                                    >
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="
+                                                'heroicons_outline:camera'
+                                            "
+                                        ></mat-icon>
+                                    </label>
+                                </div>
+                                <div>
+                                    <button
+                                        mat-icon-button
+                                        (click)="removeAvatar()"
+                                    >
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="
+                                                'heroicons_outline:trash'
+                                            "
+                                        ></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Image/Letter -->
+                            @if (user.profile_img_url) {
+                                <img
+                                    class="h-full w-full object-cover"
+                                    [ngClass]="user.active == 'Yes' ? 'grayscale-0' : 'grayscale'"
+                                    [src]="user.profile_img_url"
+                                />
+                            }
+                            @if (!user.profile_img_url) {
+                                <div
+                                    class="flex h-full w-full items-center justify-center overflow-hidden rounded bg-gray-200 text-8xl font-bold uppercase leading-none text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                    [ngClass]="user.active == 'Yes' ? 'bg-green-200' : 'bg-gray-200'">
+                                    {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+                                </div>
+                            }
+                        </div>
+                        <!-- Actions -->
+                        <div class="mb-1 ml-auto flex items-center">
+                            <button
+                                mat-stroked-button
+                                class="bg-warn-200"
+                                (click)="toggleEditMode(false)"
+                            >
+                                <mat-icon
+                                    class="icon-size-5"
+                                    [svgIcon]="'heroicons_solid:pencil-square'"
+                                ></mat-icon>
+                                <span class="ml-2">Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- First Name -->
+                    <div class="mt-8">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'"
+                        >
+                            <mat-label>First Name</mat-label>
+                            <mat-icon
+                                matPrefix
+                                class="hidden icon-size-5 sm:flex"
+                                [svgIcon]="'heroicons_solid:user-circle'"
+                            ></mat-icon>
+                            <input
+                                matInput
+                                [formControlName]="'first_name'"
+                                [ngModel]="user.name"
+                                [placeholder]="'First Name'"
+                                [spellcheck]="false"
+                            />
+                        </mat-form-field>
+                    </div>
+                    <!-- First Name -->
+                    <div class="mt-8">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'"
+                        >
+                            <mat-label>Last Name</mat-label>
+                            <mat-icon
+                                matPrefix
+                                class="hidden icon-size-5 sm:flex"
+                                [svgIcon]="'heroicons_solid:user-circle'"
+                            ></mat-icon>
+                            <input
+                                matInput
+                                [formControlName]="'last_name'"
+                                [ngModel]="user.name"
+                                [placeholder]="'Last Name'"
+                                [spellcheck]="false"
+                            />
+                        </mat-form-field>
+                    </div>
+                    <!-- Email -->
+                    <div class="mt-8">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'"
+                        >
+                            <mat-label>Email</mat-label>
+                            <mat-icon
+                                matPrefix
+                                class="hidden icon-size-5 sm:flex"
+                                [svgIcon]="'mat_outline:email'"
+                            ></mat-icon>
+                            <input
+                                matInput
+                                [formControlName]="'email'"
+                                [placeholder]="'Email'"
+                                [ngModel]="user.email"
+
+                            />
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="flex flex-row">
+                        <div class="basis-autp mt-8">
+                            <mat-form-field
+                                class="w-full"
+                                [subscriptSizing]="'dynamic'"
+                            >
+                                <mat-label>Country Code</mat-label>
+                                <mat-icon
+                                    matPrefix
+                                    class="hidden icon-size-5 sm:flex"
+                                    [svgIcon]="'mat_outline:phone'"
+                                ></mat-icon>
+                                <input
+                                    matInput
+                                    [formControlName]="'mobile_phone'"
+                                    [placeholder]="'MObile Phone'"
+                                    [ngModel]="user.website"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <search [appearance]="'bar'"></search>
+                        
+                        <div class="basis-full mt-8">
+                            <mat-form-field
+                                class="w-full"
+                                [subscriptSizing]="'dynamic'"
+                            >
+                                <mat-label>Mobile Phone</mat-label>
+                                <mat-icon
+                                    matPrefix
+                                    class="hidden icon-size-5 sm:flex"
+                                    [svgIcon]="'mat_outline:phone'"
+                                ></mat-icon>
+                                <input
+                                    matInput
+                                    [formControlName]="'mobile_phone'"
+                                    [placeholder]="'MObile Phone'"
+                                    [ngModel]="user.website"
+                                />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mt-8">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'"
+                        >
+                            <mat-label>Address</mat-label>
+                            <mat-icon
+                                matPrefix
+                                class="hidden icon-size-5 sm:flex"
+                                [svgIcon]="'heroicons_solid:map-pin'"
+                            ></mat-icon>
+                            <input
+                                matInput
+                                [formControlName]="'address'"
+                                [placeholder]="'Address'"
+                                [ngModel]="user.address"
+
+                            />
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Actions -->
+                    <div
+                        class="-mx-6 mt-10 flex items-center border-t bg-gray-50 py-4 pl-1 pr-4 dark:bg-transparent sm:-mx-12 sm:pl-7 sm:pr-12"
+                    >
+                        <!-- Delete -->
+                        <button
+                            mat-button
+                            [color]="'warn'"
+                            [matTooltip]="'Delete'"
+                            (click)="deleteUser()"
+                        >
+                            Delete
+                        </button>
+                        <!-- Cancel -->
+                        <button
+                            class="ml-auto"
+                            mat-button
+                            [matTooltip]="'Cancel'"
+                            (click)="toggleEditMode(false)"
+                        >
+                            Cancel
+                        </button>
+                        <!-- Save -->
+                        <button
+                            class="ml-2"
+                            mat-flat-button
+                            [color]="'primary'"
+                            [disabled]="userForm.invalid"
+                            [matTooltip]="'Save'"
+                            (click)="updateUser()"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>

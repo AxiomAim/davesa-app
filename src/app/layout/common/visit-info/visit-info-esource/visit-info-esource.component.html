@@ -1,0 +1,12 @@
+<div *ngIf="esourceData" class="message-box">
+  <div class="modal-wrapper">
+    <h1 mat-dialog-title>{{ esourceData.name }}</h1>
+    <!-- <app-json-form
+      (submitForm)="submitForm($event)"
+      [jsonFormData]="esourceData.json_form_data"
+      [formData]="formData"
+    ></app-json-form> -->
+    <app-surveyjs-forms *ngIf="surveyData" [isCompareVisit]="isCompareVisit" [surveyData]="surveyData" (FormCompleteEvent)="submitForm($event)"></app-surveyjs-forms>
+  </div>
+</div>
+

@@ -1,0 +1,31 @@
+/* eslint-disable */
+export const irbs = [
+    {
+        id: 1,
+        oid: '00000001-0000-0000-0000-000000000000',
+        name: '',
+        website: '',
+        email: '',
+        street_1: '',
+        street_2: '',
+        mobile_phone: '',
+        phone_phone: '',
+        country_name: '',
+        address: '',
+        state_id: '',
+        country_id: 1,
+        city_id: 2,
+        state: '',
+        country: '',
+        city: '',
+        country_code: 1,
+        type: '',
+        zip: '',
+        created_by: 1,
+        updated_by: 1,
+        stateName: '',
+        countryName: '',
+        cityName: '',
+        created_at: '2019-05-24T03:55:38.969Z'      
+    },
+]

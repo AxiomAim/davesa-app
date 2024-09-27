@@ -1,0 +1,18 @@
+@if(alertMessage()) {
+    <div class="flex  flex-row justify-center items-center px-1 py-4  w-full rounded-2xl md:absolute z-10"
+        [ngClass]="getStyle(alertMessage()?.type)">
+        <div class="flex">
+            <div class="text-2xl font-semibold leading-none tracking-tight sm:text-2xl self-center">
+                {{alertMessage()?.text}}
+            </div>
+            <a 
+                mat-icon-button 
+                (click)="dismiss()" 
+                class="text-2xl font-semibold leading-none tracking-tight sm:text-2xl self-center"
+            >
+                <mat-icon [ngClass]="getIconColor(alertMessage()?.type)" [svgIcon]="getIcon(alertMessage()?.type)">
+                </mat-icon>
+            </a>
+        </div>
+    </div>
+}

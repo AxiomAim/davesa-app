@@ -1,0 +1,15 @@
+export enum UserDelegationEnum {
+  PI = 'Principal Investigator (PI)',
+  SI = 'Sub-Investigator (Sub-I)',
+  SS = 'Study Supervisor',
+  DM = 'Data Manager',
+  DQ = 'Data QA',
+  PC = 'Primary Coordinator (CRC-1)',
+  SC = 'Secondary Coordinator (CRC-2)',
+  PT = 'Pharmacy Technician',
+  RE = 'Regulatory',
+  MO = 'Monitor',
+  DC = 'Data Capturer',
+  BK = 'Bookkeeper',
+  FC = 'Finance/CPA',
+}

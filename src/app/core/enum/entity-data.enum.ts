@@ -1,0 +1,16 @@
+export enum EntityDataEnum {
+  STUDY_TYPE = "Study Type",
+  STUDY_PHASE = "Study Phase",
+  CONTACT_CATEGORY = "Contact Category",
+  SPECIALTY = "Specialty",
+  COMPLIANCE_ROLE = "Compliance Role",
+  LOCATION = "Location",
+  COUNTRY_CODE = "Country Code",
+  DOCUMENT_TYPE = "Document Type",
+  PREFIX = "Prefix",
+  SEX = "Sex",
+  SUFFIX = "Suffix",
+  CURRENCY = "Currency",
+  ESOURCE_FORM_CATEGORY = "Esource Form Category",
+  TRAINING_METHOD = "Training Method",
+}

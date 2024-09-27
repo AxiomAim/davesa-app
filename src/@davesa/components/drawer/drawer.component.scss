@@ -1,0 +1,132 @@
+/* Variables */
+:root {
+    --davesa-drawer-width: 90%;
+}
+
+davesa-drawer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: var(--davesa-drawer-width);
+    min-width: var(--davesa-drawer-width);
+    max-width: var(--davesa-drawer-width);
+    z-index: 300;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.35);
+    @apply bg-card;
+
+    /* Animations */
+    &.davesa-drawer-animations-enabled {
+        transition-duration: 400ms;
+        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition-property: visibility, margin-left, margin-right, transform,
+            width, max-width, min-width;
+
+        .davesa-drawer-content {
+            transition-duration: 400ms;
+            transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition-property: width, max-width, min-width;
+        }
+    }
+
+    /* Over mode */
+    &.davesa-drawer-mode-over {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+
+        /* Fixed mode */
+        &.davesa-drawer-fixed {
+            position: fixed;
+        }
+    }
+
+    /* Left position */
+    &.davesa-drawer-position-left {
+        /* Side mode */
+        &.davesa-drawer-mode-side {
+            margin-left: calc(var(--davesa-drawer-width) * -1);
+
+            &.davesa-drawer-opened {
+                margin-left: 0;
+            }
+        }
+
+        /* Over mode */
+        &.davesa-drawer-mode-over {
+            left: 0;
+            transform: translate3d(-100%, 0, 0);
+
+            &.davesa-drawer-opened {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        /* Content */
+        .davesa-drawer-content {
+            left: 0;
+        }
+    }
+
+    /* Right position */
+    &.davesa-drawer-position-right {
+        /* Side mode */
+        &.davesa-drawer-mode-side {
+            margin-right: calc(var(--davesa-drawer-width) * -1);
+
+            &.davesa-drawer-opened {
+                margin-right: 0;
+            }
+        }
+
+        /* Over mode */
+        &.davesa-drawer-mode-over {
+            right: 0;
+            transform: translate3d(100%, 0, 0);
+
+            &.davesa-drawer-opened {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        /* Content */
+        .davesa-drawer-content {
+            right: 0;
+        }
+    }
+
+    /* Content */
+    .davesa-drawer-content {
+        position: absolute;
+        display: flex;
+        flex: 1 1 auto;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        @apply bg-card;
+    }
+}
+
+/* Overlay */
+.davesa-drawer-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 299;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+
+    /* Fixed mode */
+    &.davesa-drawer-overlay-fixed {
+        position: fixed;
+    }
+
+    /* Transparent overlay */
+    &.davesa-drawer-overlay-transparent {
+        background-color: transparent;
+    }
+}

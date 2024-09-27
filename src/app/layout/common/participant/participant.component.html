@@ -1,0 +1,67 @@
+<div class="flex w-full flex-col">
+    <!-- View mode -->
+    @if (participant) {
+    <!-- Header -->
+    <div class="relative">
+        <div class="flex flex-row gap-1 m-2">
+            <div class="basis-1/6 h-full w-full items-center text-center rounded-full">
+                <div class="flex h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    <div
+                        class="flex h-full w-full items-center justify-center rounded-full bg-gray-200 text-lg uppercase text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                        {{ participant.first_name.charAt(0) + participant.last_name.charAt(0) }}
+                    </div>
+                </div>
+            </div>
+            <div class="basis-auto h-full w-full items-center text-left">
+                <div class="ml-4 min-w-0">
+                    <div class="truncate font-medium leading-5">
+                        {{ participant.subject_id }}
+                    </div>
+                    <div class="text-secondary truncate leading-5">
+                        {{ participant.status }}
+                    </div>
+                </div>
+            </div>
+            <div class="basis-1/6 h-full w-full">
+                <div class="mb-1 ml-auto flex items-center">
+                    <button mat-stroked-button (click)="toggleEditMode(true)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-square'"></mat-icon>
+                        <span class="ml-2">Edit</span>
+                    </button>
+                </div>
+            </div>
+            <div class="basis-1/6 h-full w-full">
+                <div class="mx-auto flex w-full max-w-3xl items-center justify-end">
+                    <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" class="bg-warn-100 ">
+                        <mat-icon class="text-primary" [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Other Information-->
+        <div class="flex flex-row gap-1 m-2">
+            <div class="basis-1/6 h-full w-full items-center text-center rounded-full">
+                <div class="flex h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                    <div class="flex h-full w-full items-center justify-center rounded-full text-lg uppercase dark:bg-gray-700 dark:text-gray-200"
+                        [ngClass]="getAgeColor('male')">
+                        {{ participant.birth_date | age }}
+                    </div>
+                </div>
+            </div>
+            <div class="basis-auto h-full w-full items-center text-left">
+                <div class="ml-4 min-w-0">
+                    <div class="truncate font-medium leading-5">
+                        <span class="font-w-500 text-primary-500 mr-3">Birth:</span> <span
+                            class="font-w-500 text-gray-500">{{ participant.birth_date | date : "dd MMM yyyy" }}</span>
+                    </div>
+                    <div class="text-secondary truncate leading-5">
+                        <span class="font-w-500 text-primary-500 mr-3">Next Visit:</span> <span
+                            class="font-w-500 text-gray-500">{{ participant.birth_date | date : "dd MMM yyyy" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <visit-board></visit-board>
+    </div>
+    }
+</div>

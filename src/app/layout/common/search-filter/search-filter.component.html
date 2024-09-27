@@ -1,0 +1,22 @@
+<mat-form-field style="font-size: 12px" appearance="outline" fxFlex="50">
+  <mat-label>{{ label }}</mat-label>
+  <input type="text" matInput [formControl]="searchControl" [placeholder]="placeholder" />
+</mat-form-field>
+
+@if(isUserLoggedAsAdmin && isSiteFilter) {
+  <mat-form-field style="font-size: 12px" appearance="outline" fxFlex="50" class="ml-2">
+    <mat-label>Site</mat-label>
+    <mat-select [formControl]="siteControl" (selectionChange)="changeSiteAccount($event.value)">
+      <mat-option [value]="0">None</mat-option>
+      @for(
+        siteAccount of siteAccounts;
+        track trackByFn(i, siteAccount);
+        let i = $index
+      ) {
+        <mat-option [value]="siteAccount.id">
+          {{ siteAccount.site_name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+}

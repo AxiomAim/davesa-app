@@ -1,0 +1,165 @@
+
+<div
+class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-4">
+<div class="truncate text-lg font-medium leading-6 tracking-tight">
+  Visit Status Board
+</div>
+</div>
+
+<main className=" flex flex-row h-screen">
+
+  <div className=" w-4/5 bg-gray-50 h-screen overscroll-auto">
+    <ejs-grid id="visitStatusGrid" #visitStatusGrid [dataSource]="{ result: rows, count: unfilterCount }"
+      allowTextWrap="true" [textWrapSettings]="wrapSettings" [allowPaging]="true" [pageSettings]="pageSettings"
+      [allowGrouping]="false" [toolbar]="toolbar" height="100%" [allowSorting]="true"
+      (actionBegin)="actionBegin($event)" (created)="search()" [ngClass]="{'e-dark-mode': config['scheme']}">
+
+      >
+      <e-columns>
+        <e-column field="number" headerText="Study" width="150">
+          <ng-template #headerTemplate>
+            <div class="orderIDHeader">Study</div>
+          </ng-template>
+        </e-column>
+        <e-column field="crc" headerText="Name" width="150" [allowSorting]="false">
+          <ng-template #headerTemplate>
+            <div class="customerIDHeader">CRC</div>
+          </ng-template>
+        </e-column>
+        <e-column field="unconfirmed_visits_count" headerText="UNC" width="50" [allowSorting]="false"
+          textAlign="Center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Unconfirmed" matTooltipPosition="above">
+              <mat-icon class="text-cyan-500" [svgIcon]="'davesaicons_solid:visit-unconfirmed'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu *ngIf="data.unconfirmed_visits_count > 0; else elseTemplate"
+              (openSidebarSubjectEvent)="openSidebarVisit($event)" [bgClass]="'bg-cyan-500'"
+              [count]="data.unconfirmed_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.UNCONFIRMED"
+              [matToolTip]="'Unconfirmed Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="confirmed_visits_count" headerText="CON" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Confirmed" matTooltipPosition="above">
+              <mat-icon class="text-cyan-700" [svgIcon]="'davesaicons_solid:visit-confirmed'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.confirmed_visits_count > 0; else elseTemplate" [bgClass]="'bg-cyan-700'"
+              [count]="data.confirmed_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.CONFIRMED"
+              [matToolTip]="'Confirmed Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="reschedule_visits_count" headerText="RSC" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Reschedule" matTooltipPosition="above">
+              <mat-icon class="text-lime-500" [svgIcon]="'davesaicons_solid:visit-reschedule'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.reschedule_visits_count > 0; else elseTemplate" [bgClass]="'bg-lime-500'"
+              [count]="data.reschedule_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.RESCHEDULE"
+              [matToolTip]="'Reschedule Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="absent_visits_count" headerText="ABS" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Absent" matTooltipPosition="above">
+              <mat-icon class="text-pink-500" [svgIcon]="'davesaicons_solid:visit-absent'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.absent_visits_count > 0; else elseTemplate" [bgClass]="'bg-pink-500'"
+              [count]="data.absent_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.ABSENT"
+              [matToolTip]="'Absent Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="missed_visits_count" headerText="MIS" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Missed" matTooltipPosition="above">
+              <mat-icon class="text-rose-500" [svgIcon]="'davesaicons_solid:visit-missed'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.missed_visits_count > 0; else elseTemplate" [bgClass]="'bg-rose-500'"
+              [count]="data.missed_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.MISSED"
+              [matToolTip]="'Missed Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="clinic_visits_count" headerText="MIS" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Clinic" matTooltipPosition="above">
+              <mat-icon class="text-sky-500" [svgIcon]="'davesaicons_solid:visit-clinic'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.clinic_visits_count > 0; else elseTemplate" [bgClass]="'bg-sky-500'"
+              [count]="data.clinic_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.CLINIC"
+              [matToolTip]="'Clinic Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="review_visits_count" headerText="REV" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Review" matTooltipPosition="above">
+              <mat-icon class="text-emerald-400" [svgIcon]="'davesaicons_solid:visit-review'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.review_visits_count > 0; else elseTemplate" [bgClass]="'bg-emerald-400'"
+              [count]="data.review_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.REVIEW"
+              [matToolTip]="'Review Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="finished_visits_count" headerText="FIN" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Finished" matTooltipPosition="above">
+              <mat-icon class="text-emerald-600" [svgIcon]="'davesaicons_solid:visit-finished'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.finished_visits_count > 0; else elseTemplate" [bgClass]="'bg-emerald-600'"
+              [count]="data.finished_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.FINISHED"
+              [matToolTip]="'Finished Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="validated_visits_count" headerText="VAL" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Validated" matTooltipPosition="above">
+              <mat-icon class="text-emerald-700" [svgIcon]="'davesaicons_solid:visit-validated'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.validated_visits_count > 0; else elseTemplate" [bgClass]="'bg-emerald-700'"
+              [count]="data.validated_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.VALIDATED"
+              [matToolTip]="'Validated Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+        <e-column field="endorsed_visits_count" headerText="END" width="50" [allowSorting]="false" textAlign="center">
+          <ng-template #headerTemplate>
+            <a mat-icon-button matTooltip="Endorsed" matTooltipPosition="above">
+              <mat-icon class="text-emerald-900" [svgIcon]="'davesaicons_solid:visit-endorsed'"></mat-icon>
+            </a>
+          </ng-template>
+          <ng-template #template #editTemplate let-data>
+            <subject-visit-menu (openSidebarSubjectEvent)="openSidebarVisit($event)"
+              *ngIf="data.endorsed_visits_count > 0; else elseTemplate" [bgClass]="'bg-emerald-900'"
+              [count]="data.endorsed_visits_count" [study_oid]="data.oid" [visitStatus]="visitStatus.ENDORSED"
+              [matToolTip]="'Endorsed Visit'"></subject-visit-menu>
+          </ng-template>
+        </e-column>
+      </e-columns>
+    </ejs-grid>
+
+    <ng-template #elseTemplate>0</ng-template>
+  </div>
+</main>

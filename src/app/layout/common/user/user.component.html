@@ -1,0 +1,57 @@
+<!-- User -->
+@if(showVertical) {
+<div class="flex w-full flex-col items-center p-4">
+    @if(showAvatar) {
+    <div class="relative h-24 w-24">
+        @if (user.profile_img_url) {
+        <img class="h-full w-full rounded-full" [src]="user.profile_img_url" alt="User profile" />
+        }
+        @if (!user.profile_img_url) {
+        <mat-icon class="icon-size-24" [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+        }
+    </div>
+    }
+    <div class="mt-6 flex w-full flex-col items-center justify-center">
+        <div class="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center font-medium leading-normal">
+            {{ user.first_name }} {{ user.last_name }}
+        </div>
+        <div
+            class="text-secondary mt-0.5 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-md font-medium leading-normal">
+            {{ user.email }}
+        </div>
+        <div
+            class="text-secondary mt-0.5 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-md font-medium leading-normal">
+            {{ userRole }}
+        </div>
+    </div>
+</div>
+}
+@if(!showVertical) {
+    <div class="shrink flex min-w-0 flex-auto items-center">
+        <div class="flex size-[6rem]  min-w-0 flex-auto items-center">
+            @if (user.profile_img_url) {
+                <img class="object-cove" [src]="user.profile_img_url" alt="Avatar" />
+            }
+            @if (!user.profile_img_url) {
+                <img class="object-cove" src="images/logo/logo.svg" alt="Avatar" />
+            }
+            </div>
+        <div class="ml-4 flex min-w-0 flex-col">
+            <ng-container *transloco="let t">
+                <div
+                    class="truncate text-2xl font-semibold leading-7 tracking-tight md:text-5xl md:leading-snug"
+                >
+                    {{ 'welcome-back' | transloco }}, {{ user.first_name }} 
+                </div>
+            </ng-container>
+            <div class="flex items-center">
+                <div
+                    class="text-secondary ml-1.5 truncate leading-6"
+                >
+                    {{ user.email }} | {{ user.first_name }} {{ user.last_name }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,101 @@
+<div fxLayout="row" class="w-100" fxLayoutAlign="space-between start">
+    <div fxFlex="50">
+      <!-- <app-search-filter
+        (changeSite)="changeSiteAccount($event)"
+        (searchData)="searchData($event)"
+        [isSiteFilter]="isSiteFilter"
+        [componentName]="componentName"
+        label="Type to filter"
+        placeholder="Type to search"
+      ></app-search-filter> -->
+    </div>
+    <div fxLayout="row" fxLayoutGap="5px">
+      <button
+        color="primary"
+        mat-raised-button
+        [disabled]="!permissionsObj?.isCreate && !permissionsObj?.isAccessAllowed"
+        (click)="cloneStudy()"
+      >
+        + Clone existing study
+      </button>
+      <button
+        color="primary"
+        mat-raised-button
+        [disabled]="!permissionsObj?.isCreate && !permissionsObj?.isAccessAllowed"
+        (click)="createStudy()"
+      >
+        <mat-icon class="mx-2">add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+<!-- <div class="theme-container">
+    <h2 class="m-3 bottom-border-primary">{{ gridTitle }}</h2>
+    <div *ngIf="user$ | async as user">
+        <div *ngIf="user.superAdmin || user.systemAdmin || user.csvAdmin">
+            <button
+                mat-button
+                aria-label="Add"
+                (click)="onCsvRecord(null, 'sidebarRecord')"
+                class="primary-color font-14"
+            >
+                <mat-icon
+                    class="mat-icon-md"
+                    [svgIcon]="'csv-doc-add'"
+                >
+                </mat-icon>
+                Add
+            </button>
+        </div>
+    </div>
+    <div *ngIf="csvRecords$ | async csvRecords"> -->
+
+        <ejs-grid
+            id="studyGrid"
+            #studyGrid
+            [dataSource]="studies$ | async"
+            allowTextWrap="true"
+            [textWrapSettings]="wrapSettings"
+            [allowPaging]="true"
+            [pageSettings]='pageSettings'
+            [allowGrouping]='false'
+            [toolbar]="toolbar"
+            height="100%"
+            [allowSorting]='true'
+        >
+            <e-columns>
+                <e-column
+                    field="id"
+                    [isPrimaryKey]="true"
+                    [visible]="false"
+                    headerText="id"
+                ></e-column>
+                <e-column
+                    field='number'
+                    headerText='Number'
+                    width='100'
+                ></e-column>
+                <e-column
+                    field='nick_name'
+                    headerText='Nickname'
+                    width='100'
+                ></e-column>
+                <e-column
+                    field='enrolled'
+                    headerText='# Enrolled'
+                    width='100'
+                ></e-column>
+                <e-column
+                    field='sponsor'
+                    headerText='Sponsor'
+                    width='100'
+                ></e-column>
+                <e-column
+                    field='coordinator'
+                    headerText='Coordinator'
+                    width='100'
+                ></e-column>
+            </e-columns>
+        </ejs-grid>
+    <!-- </div>
+</div> -->

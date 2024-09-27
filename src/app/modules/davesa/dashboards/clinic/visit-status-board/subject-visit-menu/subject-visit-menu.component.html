@@ -1,0 +1,58 @@
+<a mat-button
+  class="rounded text-xs font-semibold text-white shadow-sm hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+  [matMenuTriggerFor]="subjectsMenu" #subjectsMenuTrigger="matMenuTrigger" [ngClass]="count > 0 ? bgClass : null"
+  [matTooltip]="matToolTip" [matTooltipPosition]="matToolTipPosition" (click)="visitList(subjectsMenuTrigger.menuOpen)">
+  <span fxShow="false" fxShow.gt-sm class="">
+    {{ count }}
+  </span>
+  @if(count > 0) {
+  <mat-icon [svgIcon]="'heroicons_mini:chevron-down'" iconPositionEnd>
+  </mat-icon>
+  }
+</a>
+<mat-menu #subjectsMenu="matMenu" [overlapTrigger]="false" class="toolbar-dropdown-menu admin-user-menu">
+  <div class="search-results" class="visitMenu">
+    <span (mouseleave)="subjectsMenuTrigger.closeMenu()" *ngIf="count > 0">
+      @for (visit of visits; track visit) {
+      <button mat-menu-item (click)="openSidebarSubject(visit)">
+        <div class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+          <div
+            class="flex h-full w-full text-sm items-center justify-center rounded-full bg-gray-200 text-lg uppercase text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+            {{ visit.subject.first_name ? visit.subject.first_name.charAt(0) : null }}{{ visit.subject.middle_name ?
+            visit.subject.middle_name.charAt(0) : null }}{{ visit.subject.last_name ? visit.subject.last_name.charAt(0)
+            : null }}
+          </div>
+        </div>
+        <div class="basis-1/3 ml-4 min-w-0">
+
+          <div class="flex ml-3 truncate">
+            {{ visit.subject.subject_id }}
+          </div>
+          <div class="flex ml-3 truncate">
+            {{ visit?.study_schedule_visit.name }}
+          </div>
+        </div>
+      </button>
+      <div class="divider"></div>
+      }
+    </span>
+  </div>
+</mat-menu>
+
+<ng-template #elseTemplate> </ng-template>
+
+<ejs-sidebar id="sidebarSubjectDetails" class="sidebar bg-light" #sidebarSubjectDetails [position]="positionRight"
+  [showBackdrop]="showBackdrop" (created)="onSidebarCreated()" style="visibility: hidden; text-align: initial;"
+  width="40%">
+  <button mat-button (click)="closeRightClick()" color="primary">
+    <mat-icon color="primary">close</mat-icon>
+    Close
+  </button>
+
+  <div class="m-3">
+    @if(subjectInfo) {
+    <visit-info-dialog [isCompareVisit]="false" [subjectInfo]="subjectInfo"
+      (closeVisitSidebar)="closeRightClick($event)"></visit-info-dialog>
+    }
+  </div>
+</ejs-sidebar>

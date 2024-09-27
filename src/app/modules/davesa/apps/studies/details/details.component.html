@@ -1,0 +1,69 @@
+<mat-drawer-container class="h-full flex-auto">
+
+    <div class="flex w-full flex-col bg-gray-100 dark:bg-gray-900">
+        <!-- Header -->
+        <div class="relative">
+            <div class="flex flex-row gap-1 m-2">
+                <div class="basis-10 h-full w-full items-center text-center rounded-full">
+                    <a mat-icon-button [matTooltip]="'Go Back'" [routerLink]="['../']" class="">
+                        <mat-icon  [svgIcon]="'heroicons_outline:chevron-double-left'"></mat-icon>
+                    </a>
+                </div>
+                <div class="basis-10 h-full w-full items-center text-center rounded-full">
+                    <div
+                        class="flex basis-auto h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full">
+                        @if (study.logo) {
+                        <img class="h-full w-full object-cover stroke-2" [src]="study.logo"
+                            alt="Study avatar" />
+                        }
+                        @if (!study.logo) {
+                        <img class="h-full w-full object-cover stroke-2" src="images/logo/logo.svg"
+                            alt="Study Logo" />
+                        }
+                    </div>
+                </div>
+                <div class="basis-auto h-full w-full items-center text-left ml-2 mt-1 rounded-full text-secondary">
+                    <span 
+                        class="text-secondary sticky top-0 z-10 -mt-px border-b border-t text-2xl text-primary font-medium">
+                        {{ study.number }}
+                    </span>
+                </div>
+                <div class="basis-10 h-full w-full items-center text-center rounded-full">
+                    <a mat-icon-button [matTooltip]="'Close'" (click)="openMailbox(study)" class="">
+                        <mat-icon class="text-primary" [svgIcon]="'mat_outline:mail_outline'"></mat-icon>
+                    </a>
+                </div>
+
+
+            </div>
+            <!-- Other Information-->    
+            <!-- <study-details [oid]="study.oid"></study-details> -->
+
+            <!-- Tabs -->
+            <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
+                <!-- Visits -->
+                <mat-tab label="Visits">
+                    <ng-template matTabContent>
+                        <!-- <participant-visits [oid]="study.oid"></participant-visits> -->
+                    </ng-template>
+                </mat-tab>
+                <!-- Participants -->
+                <mat-tab label="Participants">
+                    <ng-template matTabContent>
+                    </ng-template>
+                </mat-tab>
+                <!-- Team -->
+                <mat-tab label="Team">
+                    <ng-template matTabContent>
+                    </ng-template>
+                </mat-tab>
+                <!-- DOA -->
+                <mat-tab label="DOA">
+                    <ng-template matTabContent>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+            
+
+        </div>
+</div>

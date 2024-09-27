@@ -1,0 +1,109 @@
+/* Variables */
+:root {
+    --davesa-vertical-navigation-compact-width: 112px;
+}
+
+davesa-vertical-navigation {
+    /* Compact appearance overrides */
+    &.davesa-vertical-navigation-appearance-compact {
+        width: var(--davesa-vertical-navigation-compact-width);
+        min-width: var(--davesa-vertical-navigation-compact-width);
+        max-width: var(--davesa-vertical-navigation-compact-width);
+
+        /* Left positioned */
+        &.davesa-vertical-navigation-position-left {
+            /* Side mode */
+            &.davesa-vertical-navigation-mode-side {
+                margin-left: calc(
+                    var(--davesa-vertical-navigation-compact-width) * -1
+                );
+            }
+
+            /* Opened */
+            &.davesa-vertical-navigation-opened {
+                margin-left: 0;
+            }
+        }
+
+        /* Right positioned */
+        &.davesa-vertical-navigation-position-right {
+            /* Side mode */
+            &.davesa-vertical-navigation-mode-side {
+                margin-right: calc(
+                    var(--davesa-vertical-navigation-compact-width) * -1
+                );
+            }
+
+            /* Opened */
+            &.davesa-vertical-navigation-opened {
+                margin-right: 0;
+            }
+
+            /* Aside wrapper */
+            .davesa-vertical-navigation-aside-wrapper {
+                left: auto;
+                right: var(--davesa-vertical-navigation-compact-width);
+            }
+        }
+
+        /* Wrapper */
+        .davesa-vertical-navigation-wrapper {
+            /* Content */
+            .davesa-vertical-navigation-content {
+                > davesa-vertical-navigation-aside-item,
+                > davesa-vertical-navigation-basic-item {
+                    .davesa-vertical-navigation-item-wrapper {
+                        margin: 4px 8px 0 8px;
+
+                        .davesa-vertical-navigation-item {
+                            flex-direction: column;
+                            justify-content: center;
+                            padding: 12px;
+                            border-radius: 6px;
+
+                            .davesa-vertical-navigation-item-icon {
+                                margin-right: 0;
+                            }
+
+                            .davesa-vertical-navigation-item-title-wrapper {
+                                margin-top: 8px;
+
+                                .davesa-vertical-navigation-item-title {
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    text-align: center;
+                                    line-height: 16px;
+                                }
+
+                                .davesa-vertical-navigation-item-subtitle {
+                                    display: none !important;
+                                }
+                            }
+
+                            .davesa-vertical-navigation-item-badge {
+                                position: absolute;
+                                top: 12px;
+                                left: 64px;
+                            }
+                        }
+                    }
+
+                    > davesa-vertical-navigation-collapsable-item {
+                        display: none;
+                    }
+
+                    > davesa-vertical-navigation-group-item {
+                        > .davesa-vertical-navigation-item-wrapper {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Aside wrapper */
+        .davesa-vertical-navigation-aside-wrapper {
+            left: var(--davesa-vertical-navigation-compact-width);
+        }
+    }
+}

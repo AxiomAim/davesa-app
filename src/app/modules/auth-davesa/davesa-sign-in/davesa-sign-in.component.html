@@ -1,0 +1,160 @@
+<!-- Split -->
+<div class="flex min-w-0 flex-auto flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
+    <div
+        class="w-full px-4 py-8 sm:bg-card sm:w-auto sm:rounded-2xl sm:p-12 sm:shadow md:flex md:h-full md:w-1/2 md:items-center md:justify-end md:rounded-none md:p-16 md:shadow-none">
+        <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
+            <!-- Logo -->
+            <div class="w-12">
+                <img src="images/logo/logo.svg" />
+            </div>
+
+            <!-- Title -->
+            <div class="mt-8 text-4xl font-extrabold leading-tight tracking-tight">
+                Davesa Sign in
+            </div>            
+            <!-- Alert -->
+            @if (showAlert) {
+            <davesa-alert class="mt-8" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+                [@shake]="alert.type === 'error'">
+                {{ alert.message }}
+            </davesa-alert>
+            }
+
+            <!-- Sign in form -->
+            <form class="mt-8" [formGroup]="signInForm" (ngSubmit)="onSubmit(signInForm)" #signInNgForm="ngForm">
+                <!-- Username field -->
+                @if (isDomainControl) {
+                <mat-form-field class="w-full">
+                    <mat-label>Sub Domain Name</mat-label>
+                    <input matInput type="text" [formControl]="domain" (change)="orgDomainChange()">
+                </mat-form-field>
+                }
+
+                <mat-form-field class="w-full">
+                    <mat-label>Username</mat-label>
+                    <input id="email" matInput [formControlName]="'username'" (change)="userNameChange()" />
+                    @if (signInForm.get('username').hasError('required')) {
+                    <mat-error> Username is required </mat-error>
+                    }
+                    @if (signInForm.get('username').hasError('username')) {
+                    <mat-error>
+                        Please enter a valid username
+                    </mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input id="password" matInput type="password" [formControlName]="'password'" #passwordField />
+                    <button mat-icon-button type="button" (click)="
+                            passwordField.type === 'password'
+                                ? (passwordField.type = 'text')
+                                : (passwordField.type = 'password')
+                        " matSuffix>
+                        @if (passwordField.type === 'password') {
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        }
+                        @if (passwordField.type === 'text') {
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                        }
+                    </button>
+                    <mat-error> Password is required </mat-error>
+                </mat-form-field>
+
+                @if (userRoleList.length > 1 && userRoleList) {
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>User Role</mat-label>
+
+                    <mat-select [panelClass]="
+                                'w-72 min-w-72 max-w-72 h-auto max-h-none'
+                            " [formControlName]="'role_id'" disableOptionCentering #roleSelect="matSelect">
+                        <!-- <mat-select-trigger class="text-md">
+                                <span>User Role:</span>
+                                <span class="ml-1 font-medium">{{
+                                    roleSelect.value
+                                }}</span>
+                            </mat-select-trigger> -->
+                        @for (role of userRoleList; track role) {
+                        <!-- @for (role of userRoleList; track trackByFn($index, role)) { -->
+                        <mat-option class="h-auto py-4 leading-none" [value]="role.role_id">
+                            <div class="text-secondary mt-1.5 whitespace-normal text-sm leading-normal">
+                                {{ role.role.name }}
+                            </div>
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                }
+
+                <!-- Actions -->
+                <div class="mt-1.5 inline-flex w-full items-center justify-between">
+                    <!-- <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'rememberMe'">
+                        Remember me
+                    </mat-checkbox> -->
+                    <a class="text-md font-medium text-primary-500 hover:underline"
+                        [routerLink]="['/forgot-password']">Forgot password?
+                    </a>
+                </div>
+
+                <!-- Submit button -->
+                <button class="davesa-mat-button-large mt-6 w-full" type="submit" mat-flat-button [color]="'primary'"
+                    [disabled]="!signInForm.valid" type="submit">
+                    @if (!signInForm.disabled) {
+                    <span> Sign in </span>
+                    }
+                    @if (signInForm.disabled) {
+                    <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'"></mat-progress-spinner>
+                    }
+                </button>
+
+                <!-- Separator -->
+                <div class="mt-8 flex items-center">
+                    <div class="mt-px flex-auto border-t"></div>
+                    <div class="text-secondary mx-2">Or continue with</div>
+                    <div class="mt-px flex-auto border-t"></div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div
+        class="relative hidden h-full w-1/2 flex-auto items-center justify-center overflow-hidden bg-gray-800 p-16 dark:border-l md:flex lg:px-28">
+        <!-- Background -->
+        <!-- Rings -->
+        <!-- prettier-ignore -->
+        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- Dots -->
+        <!-- prettier-ignore -->
+        <svg class="absolute -top-16 -right-16 text-gray-700" viewBox="0 0 220 192" width="220" height="192"
+            fill="none">
+            <defs>
+                <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                    patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                </pattern>
+            </defs>
+            <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"></rect>
+        </svg>
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-2xl">
+            <div class="mb-10 w-100">
+                <img src="images/logo/horizontal_c_w.svg" />
+            </div>
+
+            <div class="text-7xl font-bold leading-none text-gray-100">
+                <div>Welcome</div>
+                <div></div>
+            </div>
+            <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
+                Cloud eEverything for Clinical Trial Sites
+            </div>
+        </div>
+    </div>
+</div>

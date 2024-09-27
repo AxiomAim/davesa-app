@@ -1,0 +1,166 @@
+/* Root navigation specific */
+davesa-horizontal-navigation {
+    .davesa-horizontal-navigation-wrapper {
+        display: flex;
+        align-items: center;
+
+        /* Basic, Branch */
+        davesa-horizontal-navigation-basic-item,
+        davesa-horizontal-navigation-branch-item {
+            @screen sm {
+                &:hover {
+                    .davesa-horizontal-navigation-item-wrapper {
+                        @apply bg-hover;
+                    }
+                }
+            }
+
+            .davesa-horizontal-navigation-item-wrapper {
+                border-radius: 4px;
+                overflow: hidden;
+
+                .davesa-horizontal-navigation-item {
+                    padding: 0 16px;
+                    cursor: pointer;
+                    user-select: none;
+
+                    .davesa-horizontal-navigation-item-icon {
+                        margin-right: 12px;
+                    }
+                }
+            }
+        }
+
+        /* Basic - When item active (current link) */
+        davesa-horizontal-navigation-basic-item {
+            .davesa-horizontal-navigation-item-active,
+            .davesa-horizontal-navigation-item-active-forced {
+                .davesa-horizontal-navigation-item-title {
+                    @apply text-primary #{'!important'};
+                }
+
+                .davesa-horizontal-navigation-item-subtitle {
+                    @apply text-primary-400 #{'!important'};
+
+                    .dark & {
+                        @apply text-primary-600 #{'!important'};
+                    }
+                }
+
+                .davesa-horizontal-navigation-item-icon {
+                    @apply text-primary #{'!important'};
+                }
+            }
+        }
+
+        /* Branch - When menu open */
+        davesa-horizontal-navigation-branch-item {
+            .davesa-horizontal-navigation-menu-active,
+            .davesa-horizontal-navigation-menu-active-forced {
+                .davesa-horizontal-navigation-item-wrapper {
+                    @apply bg-hover;
+                }
+            }
+        }
+
+        /* Spacer */
+        davesa-horizontal-navigation-spacer-item {
+            margin: 12px 0;
+        }
+    }
+}
+
+/* Menu panel specific */
+.davesa-horizontal-navigation-menu-panel {
+    .davesa-horizontal-navigation-menu-item {
+        height: auto;
+        min-height: 0;
+        line-height: normal;
+        white-space: normal;
+
+        /* Basic, Branch */
+        davesa-horizontal-navigation-basic-item,
+        davesa-horizontal-navigation-branch-item,
+        davesa-horizontal-navigation-divider-item {
+            display: flex;
+            flex: 1 1 auto;
+        }
+
+        /* Divider */
+        davesa-horizontal-navigation-divider-item {
+            margin: 8px -16px;
+
+            .davesa-horizontal-navigation-item-wrapper {
+                height: 1px;
+                box-shadow: 0 1px 0 0;
+            }
+        }
+    }
+}
+
+/* Navigation menu item common */
+.davesa-horizontal-navigation-menu-item {
+    /* Basic - When item active (current link) */
+    davesa-horizontal-navigation-basic-item {
+        .davesa-horizontal-navigation-item-active,
+        .davesa-horizontal-navigation-item-active-forced {
+            .davesa-horizontal-navigation-item-title {
+                @apply text-primary #{'!important'};
+            }
+
+            .davesa-horizontal-navigation-item-subtitle {
+                @apply text-primary-400 #{'!important'};
+
+                .dark & {
+                    @apply text-primary-600 #{'!important'};
+                }
+            }
+
+            .davesa-horizontal-navigation-item-icon {
+                @apply text-primary #{'!important'};
+            }
+        }
+    }
+
+    .davesa-horizontal-navigation-item-wrapper {
+        width: 100%;
+
+        &.davesa-horizontal-navigation-item-has-subtitle {
+            .davesa-horizontal-navigation-item {
+                min-height: 56px;
+            }
+        }
+
+        .davesa-horizontal-navigation-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 48px;
+            width: 100%;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+
+            .davesa-horizontal-navigation-item-title-wrapper {
+                .davesa-horizontal-navigation-item-subtitle {
+                    font-size: 12px;
+                }
+            }
+
+            .davesa-horizontal-navigation-item-badge {
+                margin-left: auto;
+
+                .davesa-horizontal-navigation-item-badge-content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}

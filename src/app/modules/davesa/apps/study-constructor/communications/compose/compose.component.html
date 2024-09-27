@@ -1,0 +1,87 @@
+<div class="-m-6 flex max-h-screen max-w-240 flex-col md:min-w-160">
+    <!-- Header -->
+    <div class="flex h-16 flex-0 items-center justify-between bg-primary pl-6 pr-3 text-on-primary sm:pl-8 sm:pr-5">
+        <div class="text-lg font-medium">New Communication</div>
+        <button mat-icon-button (click)="saveAndClose()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Compose form -->
+    <form class="flex flex-auto flex-col overflow-y-auto p-6 sm:p-8" [formGroup]="composeForm">
+        <div class="flex flex-col gap-1 m-2">
+            <!-- <div class="font-w-500 text-1xl text-gray-800 m-3">Send</div> -->
+            <mat-label>Send</mat-label>
+            <p>
+                <mat-button-toggle-group appearance="standard" class="" [(ngModel)]="formFieldType" multiple>
+                    <mat-button-toggle [value]="'davesa-mat-bold'"
+                        class="text-md bg-primary-100">Text</mat-button-toggle>
+                    <mat-button-toggle [value]="'davesa-mat-dense'"
+                        class="text-md bg-primary-100">Email</mat-button-toggle>
+                </mat-button-toggle-group>
+            </p>
+        </div>
+        <div class="flex flex-col gap-1 m-2">
+            <mat-label>Recipients</mat-label>
+            <ul>
+                <li>
+                    <mat-checkbox>
+                        Participant
+                    </mat-checkbox>
+                </li>
+                <li>
+                    <mat-checkbox>
+                        Guardian One
+                    </mat-checkbox>
+                </li>
+                <li>
+                    <mat-checkbox>
+                        Guardian Two
+                    </mat-checkbox>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Subject -->
+        <mat-form-field>
+            <mat-label>Subject</mat-label>
+            <input matInput [formControlName]="'subject'" />
+        </mat-form-field>
+
+        <!-- Body -->
+        <quill-editor class="mt-2 mb-2" [formControlName]="'body'" [bounds]="'self'" [modules]="quillModules">
+
+        </quill-editor>
+
+        <mat-form-field>
+            <mat-label>eForm</mat-label>
+            <mat-select>
+                <mat-option value="select1-1">
+                    eForm One
+                </mat-option>
+                <mat-option value="select1-2">
+                    eForm Two
+                </mat-option>
+                <mat-option value="select1-3">
+                    eForm Three
+                </mat-option>
+            </mat-select>
+            <mat-icon class="icon-size-5 " matPrefix [svgIcon]="'davesaicons_solid:survey'"></mat-icon>
+        </mat-form-field>
+
+        <div class="mt-4 flex items-center sm:mt-0">
+            <!-- Discard -->
+            <button class="ml-auto sm:ml-0" mat-stroked-button (click)="discard()">
+                Discard
+            </button>
+            <!-- Save as draft -->
+            <button class="sm:mx-3" mat-stroked-button (click)="saveAsDraft()">
+                <span>Save as draft</span>
+            </button>
+            <!-- Send -->
+            <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" (click)="send()">
+                Send
+            </button>
+        </div>
+    </form>
+</div>

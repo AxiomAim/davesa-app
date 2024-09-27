@@ -1,0 +1,177 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+    <mat-drawer-container class="bg-card h-full flex-auto dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+        <!-- Drawer -->
+        <mat-drawer class="w-full dark:bg-gray-900 md:w-160" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <!-- Main -->
+            <div class="flex-auto">
+                <!-- Header -->
+                <div class="relative">
+                    <div class="flex flex-row gap-1 m-2">
+                        <!-- Title -->
+                        <div class="basis-1/6 h-full w-full items-center text-center rounded-full">
+                            <div class="text-4xl font-extrabold leading-none tracking-tight">
+                                Studies
+                            </div>
+                            <div class="text-secondary ml-0.5 font-medium">
+                                @if (studiesCount > 0) {
+                                {{ studiesCount }}
+                                }
+                                {{
+                                studiesCount
+                                | i18nPlural
+                                : {
+                                '=0': 'No studies',
+                                '=1': 'contact',
+                                other: 'studies',
+                                }
+                                }}
+                            </div>
+                        </div>
+                        <div class="basis-auto h-full w-full items-center text-left">
+
+                            <div class="mx-auto flex w-full max-w-3xl items-center justify-end pt-6">
+                                <a mat-icon-button [matTooltip]="'Table View'" class="bg-gray-100 " (click)="tableView()">
+                                    <mat-icon class="text-gray" [svgIcon]="'heroicons_outline:table-cells'"></mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main actions -->
+                    <div class="mt-4 flex items-center sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex-auto">
+                            <mat-form-field class="davesa-mat-dense davesa-mat-rounded w-full min-w-50"
+                                subscriptSizing="dynamic">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="
+                                                        'heroicons_solid:magnifying-glass'
+                                                    "></mat-icon>
+                                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                                    [placeholder]="'Search studies'" />
+                            </mat-form-field>
+                        </div>
+                        <!-- Add contact button -->
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createStudy()">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- @if (studies$ | async; as studies | groupBy: 'study_number') {
+                        <div class="mt-4 flex items-center sm:mt-0 md:mt-4">
+                        <div
+                            class="bg-default w-min relative flex cursor-pointer self-start overflow-hidden rounded-t-xl border border-b-0 pb-1 pl-5 pr-4 pt-2"
+                            matRipple
+                            [matMenuTriggerFor]="studyMenu"
+                        >
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="truncate font-medium leading-6" [ngClass]="selectedStudy ? 'text-gray-900' : 'text-gray-500'">
+                                        {{ selectedStudy ? selectedStudy : placeholderStudy }}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [ngClass]="selectedStudy ? 'text-gray-900' : 'text-gray-500'"
+                                        [svgIcon]="'heroicons_mini:chevron-down'"
+                                    ></mat-icon>
+                                </div>
+                                <div class="flex items-center justify-center pl-2 items-end" (click)="resetSelectedStudy()">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [ngClass]="selectedStudy ? 'text-warn' : 'text-gray-100'"
+                                        [svgIcon]="'mat_outline:cancel'"
+                                    ></mat-icon>
+                                </div>
+                            </div>
+                            
+                            <mat-menu #studyMenu="matMenu" [xPosition]="'before'">
+                                @for (
+                                    study of studies;
+                                    track trackByFn(i, study);
+                                    let i = $index
+                                    ) {                       
+                                        <button                                        
+                                            mat-menu-item
+                                            (click)="selectedStudy = '{{ study }}'"
+                                        >
+                                            {{ study }}
+                                        </button>
+                                    }
+                            </mat-menu>
+                        </div> 
+                    </div>
+                } -->
+                <!-- Studies list -->
+                <div class="relative">
+                    @if (studies$ | async; as studies) {
+                    @if (studies.length) {
+                    @for (
+                    study of studies;
+                    track trackByFn(i, study);
+                    let i = $index
+                    ) {
+                    <div #studyList>
+                        <!-- Group -->
+                        @if (
+                        i === 0 ||
+                        study.study_number !==
+                        studies[i - 1].study_number
+                        ) {
+                        <div
+                            class="text-secondary sticky top-0 z-10 -mt-px border-b border-t text-2xl text-primary bg-accent-200 px-6 py-1 font-medium uppercase dark:bg-gray-900 md:px-8">
+                            {{ study.study_number }}
+                        </div>
+                        }
+                        <!-- Study -->
+                        <a class="z-20 flex cursor-pointer items-center border-b px-6 py-4 md:px-8" [ngClass]="{
+                                        'dark:hover:bg-hover hover:bg-gray-100':
+                                            !selectedStudy ||
+                                            selectedStudy.oid !== study.oid,
+                                        'bg-primary-50 dark:bg-hover':
+                                            selectedStudy &&
+                                            selectedStudy.oid === study.oid,
+                                    }" [routerLink]="['./', study.oid]">
+
+                            <div class="flex h-10 w-10 flex-0 items-center justify-center overflow-hidden rounded-full"
+                                #item+i [id]="'item'+ i">
+                                <div
+                                    class="flex h-full w-full items-center justify-center rounded-full bg-gray-200 text-lg uppercase text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                    {{ study.first_name.charAt(0) + study.last_name.charAt(0) }}
+                                </div>
+                            </div>
+                            <div class="ml-4 min-w-0">
+                                <div class="truncate font-medium leading-5">
+                                    {{ study.subject_id }}
+                                </div>
+                                <div class="text-secondary truncate leading-5">
+                                    {{ study.status }} | {{ study.study_number }}
+                                </div>
+                                @if(study.appointment_start_date && study.appointment_status) {
+                                <div class="text-secondary truncate leading-5">
+                                    {{ study.appointment_start_date }} | {{ study.appointment_status}}
+                                </div>
+                                }
+                            </div>
+                        </a>
+                    </div>
+
+                    }
+                    } @else {
+                    <div class="border-t p-8 text-center text-4xl font-semibold tracking-tight sm:p-16">
+                        There are no studies!
+                    </div>
+                    }
+                    }
+
+                    <!-- No studies -->
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
